@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.reed.tools</groupId>
+	<artifactId>CI-plugins</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<spring.version>4.2.7.RELEASE</spring.version>
+		<springboot.version>1.5.6.RELEASE</springboot.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.gitlab4j</groupId>
+			<artifactId>gitlab4j-api</artifactId>
+			<version>4.8.48</version>
+		</dependency>
+		<dependency>
+			<groupId>com.offbytwo.jenkins</groupId>
+			<artifactId>jenkins-client</artifactId>
+			<version>0.3.8</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.jayway.restassured/rest-assured -->
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.sonatype.nexus/nexus-rest-client-java -->
+		<!-- <dependency> <groupId>org.sonatype.nexus</groupId> <artifactId>nexus-rest-client-java</artifactId> 
+			<version>2.3.1-01</version> </dependency> -->
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+			<!-- maven release: 自动准备发布与tag:mvn release:clean release:prepare 正式发布打包并提交到nexus:mvn 
+				release:perform -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<scm>
+		<url>https://github.com/reedF/CI-plugins.git</url>
+		<connection>scm:git:https://github.com/reedF/CI-plugins.git</connection>
+		<developerConnection>scm:git:https://github.com/reedF/CI-plugins.git</developerConnection>
+	</scm>
+</project>

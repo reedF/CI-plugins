@@ -20,6 +20,21 @@
 			<groupId>com.offbytwo.jenkins</groupId>
 			<artifactId>jenkins-client</artifactId>
 			<version>0.3.8</version>
+			<exclusions>
+				<!-- 解决与gitlab依赖冲突 -->
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.jayway.restassured/rest-assured -->
 		<dependency>

@@ -1,6 +1,7 @@
 # CI-plugins
 1.Tools for CI components: git,jenkins,maven,nexus.Using these clients to call API.
 2.Axure publish html page in github
+3.Private Git repo:https://reedf.visualstudio.com
 
 # Docker image
 docker pull jenkins

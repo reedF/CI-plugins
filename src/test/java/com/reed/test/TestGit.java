@@ -22,7 +22,7 @@ public class TestGit {
 
 	public static final String HOST_URL = "http://192.168.59.103";//
 	public static final String API_TOKEN = "5AMtZ-uXsRC_kuV3YUyT";
-	public static final String PROJECT_NAME = "test";
+	public static final String PROJECT_NAME = "test-demo";
 	public static final String USER_NAME = "a1";
 	public static final String USER_PWD = "12345678";
 	public static final String DEFAULT_BRANCH = "master";
@@ -104,6 +104,27 @@ public class TestGit {
 		return r;
 	}
 
+	/**
+	 * 根据名称获取 gitlab namespace
+	 * @param name 可以是用户账号名或组名（group）
+	 * @return
+	 */
+	public static Namespace getNamespaceByName(String name) {
+		Namespace r = null;
+		try {
+			List<Namespace> ns = gitLabApi.getNamespaceApi().findNamespaces(name);
+			for (Namespace n : ns) {
+				if (n != null && name.equals(n.getName())) {
+					r = n;
+					break;
+				}
+			}
+		} catch (GitLabApiException e) {
+			e.printStackTrace();
+		}
+		return r;
+	}
+
 	public static List<Project> getProjects() {
 		List<Project> r = null;
 		try {
@@ -116,8 +137,29 @@ public class TestGit {
 		return r;
 	}
 
+	public Project getProject(String namespace, String projectName) {
+		Project p = null;
+		if (StringUtils.isNotBlank(namespace) && StringUtils.isNotBlank(projectName)) {
+			try {
+				p = gitLabApi.getProjectApi().getProject(namespace, projectName);
+			} catch (GitLabApiException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return p;
+	}
+
+	/**
+	 * 创建
+	 * @param namespaceId 注：使用git group name获取到的namespace时，当前用户需在此group内且有master以上权限
+	 * @param projectName
+	 * @return
+	 */
 	public static Project createProject(int namespaceId, String projectName) {
 		Project r = new Project().withNamespaceId(namespaceId).withName(projectName)
+				//path为namespace与projectName的下一级目录，并非替代namespace的目录
+				//.withPath(path)
 				.withDescription("My project for demonstration.").withIssuesEnabled(true).withMergeRequestsEnabled(true)
 				.withWikiEnabled(true).withSnippetsEnabled(true).withPublic(true).withVisibility(Visibility.PUBLIC);
 
@@ -140,6 +182,7 @@ public class TestGit {
 					act.setAction(Action.CREATE);
 					act.setContent(readFileContent(f));
 					act.setEncoding(Encoding.TEXT);
+					// remove root dir
 					act.setFilePath(f.getPath().replace(ROOT_PATH, "").replaceAll("\\\\", "/"));
 					actions.add(act);
 				}
